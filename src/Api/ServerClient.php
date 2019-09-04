@@ -5,13 +5,6 @@ require_once (__DIR__.'/../../../../../api/Simpla.php');
 
 class ServerClient extends \Simpla
 {
-    private $SeoUrl;
-
-
-    public function __construct()
-    {
-        $this->SeoUrl = new SeoUrl();
-    }
 
     public function get_categories()
     {
@@ -54,7 +47,7 @@ class ServerClient extends \Simpla
             $category = $this->categories->add_category([
                 'parent_id' => $parent_id,
                 'name'      => $name,
-                'url'       => $this->SeoUrl->go($name),
+                'url'       => str_slug($name),
             ]);
         }
         return $category;
@@ -86,7 +79,7 @@ class ServerClient extends \Simpla
             $product_id = $this->products->add_product(
                 [
                     'name'               => $productServer->name,
-                    'url'                => $this->SeoUrl->go($productServer->name),
+                    'url'                => str_slug($productServer->name),
                     'body'               => $productServer->body,
                     'server_id'          => $productServer->id,
                     'server_status_edit' => 0,
