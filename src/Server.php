@@ -1,9 +1,11 @@
 <?php
+
 namespace Saitdarom\Mutmarket\Parser;
 
-require_once(__DIR__ . '/../api/Simpla.php');
-require_once(__DIR__ . '/../api/ServerApi.php');
-require_once(__DIR__ . '/../api/ServerClient.php');
+require_once(__DIR__ . '/../../../../api/Simpla.php');
+
+use \Saitdarom\Mutmarket\Parser\Api\ServerApi;
+use \Saitdarom\Mutmarket\Parser\Api\ServerClient;
 
 
 class Server
@@ -14,17 +16,25 @@ class Server
     private $host;
 
 
-    public function __construct()
+    public function __construct($setting=[])
     {
-        $this->simpla = new Simpla();
+        $this->simpla = new \Simpla();
         $this->serverApi = new ServerApi();
         $this->serverClient = new ServerClient();
-        $this->host = $_SERVER['HTTP_HOST'];
+        $host = '';
+        if (isset($_SERVER['HTTP_HOST'])) $host = $_SERVER['HTTP_HOST'];
+        if (isset($setting['host'])) $host = $setting['host'];
+        if (!$host) die('задайте хост');
+        $this->host = $host;
     }
 
 
     public function start()
     {
+        if (!$this->simpla->settings->parser_status) {
+            var_dump('парсер отключен');
+            return 0;
+        }
         $this->deleteOldCategories();
         $this->addNewCatalogsAndProducts();
         $this->updateProducts();//здесь же и удаляем

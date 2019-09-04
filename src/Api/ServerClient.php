@@ -1,11 +1,12 @@
 <?php
 namespace Saitdarom\Mutmarket\Parser\Api;
 
-require_once (__DIR__.'/../api/Simpla.php');
+require_once (__DIR__.'/../../../../../api/Simpla.php');
 
-class ServerClient extends Simpla
+class ServerClient extends \Simpla
 {
     private $SeoUrl;
+
 
     public function __construct()
     {
