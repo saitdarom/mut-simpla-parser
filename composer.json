@@ -1,0 +1,33 @@
+{
+
+  "name": "saitdarom/mut-simpla-parser",
+
+  "description": "Оболочка связи между сервером и клиентом",
+
+  "license": "MIT",
+
+  "version":"1.0.0",
+
+  "authors": [
+
+    {
+
+      "name": "A.A.Apokin",
+
+      "email": "zakaz@saitdarom.ru"
+
+    }
+
+  ],
+
+  "autoload": {
+
+    "psr-4": {
+
+      "Saitdarom\\Mutmarket\\Parser\\": "src"
+
+    }
+
+  }
+
+}
