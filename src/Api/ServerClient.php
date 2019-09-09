@@ -31,7 +31,7 @@ class ServerClient extends \Simpla
     public function get_product($server_id)
     {
         $this->db->query("SELECT p.* FROM __products p
-	                    WHERE server_id=$server_id");
+	                    WHERE server_id=".(int)$server_id);
         if ($product = $this->db->result()) {
             return $this->products->get_product((int)$product->id);
         }
@@ -42,30 +42,29 @@ class ServerClient extends \Simpla
     public function add_category($name, $parent_id, $catServer_id)
     {
         $this->db->query("SELECT c.* FROM __categories c
-	                    WHERE parent_id=$parent_id AND (name='$name' OR  server_id=$catServer_id)");
+	                    WHERE parent_id=".(int)$parent_id." AND (name=\"$name\" OR  server_id=".(int)$catServer_id.")");
         if (!$category = $this->db->result()) {
-            $category = $this->categories->add_category([
+            $category_id = $this->categories->add_category([
                 'parent_id' => $parent_id,
                 'name'      => $name,
                 'url'       => str_slug($name),
             ]);
-        }
-        return $category;
+        }else$category_id=$category->id;
+        return $category_id;
     }
 
 
-    public function add_product($productServer, $flagReplace = NULL, $category_id = 0)
+    public function add_product($productServer, $flagReplace = NULL)
     {
         $product_id = 0;
         if ($product = $this->get_product($productServer->id))
             $product_id = $product->id;
 
-        if (!$product_id && $flagReplace && $category_id) {
+        if (!$product_id && $flagReplace) {
             $this->db->query("SELECT p.* FROM __products p
-                        LEFT JOIN __products_categories c on c.product_id=p.id
-	                    WHERE p.name={$productServer->name} and c.category_id=$category_id");
+	                    WHERE p.name=\"{$productServer->name}\" and !p.server_id");
             if ($product = $this->db->result()) {
-                $product_id = $this->products->update_product($product->id, [
+                $product_id = $this->products->update_product((int)$product->id, [
                     'body'               => $productServer->body,
                     'server_id'          => $productServer->id,
                     'server_status_edit' => 0,
@@ -101,7 +100,7 @@ class ServerClient extends \Simpla
                 $path_parts = pathinfo($imageTemp);
                 $extension = $path_parts['extension'];
                 if (copy($image, $dir . $product_id . '_' . $key . '.' . $extension))
-                    $this->products->add_image($product_id, $product_id . '_' . $key . '.' . $extension);
+                    $this->products->add_image((int)$product_id, $product_id . '_' . $key . '.' . $extension);
             }
     }
 
@@ -114,9 +113,9 @@ class ServerClient extends \Simpla
 //            $this->db->result();
 //        }
         $this->db->query("SELECT id FROM __products_categories
-	                    WHERE product_id=$product_id AND category_id=$category_id");
+	                    WHERE product_id=".(int)$product_id." AND category_id=".(int)$category_id);
         if (!$this->db->result()) {
-            $this->categories->add_product_category($product_id, $category_id);
+            $this->categories->add_product_category((int)$product_id, (int)$category_id);
         }
     }
 

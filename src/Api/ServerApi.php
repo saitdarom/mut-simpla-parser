@@ -35,20 +35,32 @@ class ServerApi
     }
 
     public function get_seo_title($host,$productName,$server_id){
-        $productName=urlencode($productName);
-        $url=$this->domen.'/parsers/server/getSeoTitle.php?host='.$host.'&server_id='.$server_id.'&product='.$productName;
-        return json_decode(file_get_contents($url));
+        $url=$this->domen.'/parsers/server/getSeoTitle.php';
+        return json_decode($this->post($url,['host'=>$host,'server_id'=>$server_id,'product'=>$productName]));
     }
 
     public function get_seo_desc($host,$productName,$server_id){
-        $productName=urlencode($productName);
-        $url=$this->domen.'/parsers/server/getSeoDesc.php?host='.$host.'&server_id='.$server_id.'&product='.$productName;
-        return json_decode(file_get_contents($url));
-    }
+        $url=$this->domen.'/parsers/server/getSeoDesc.php';
+        return json_decode($this->post($url,['host'=>$host,'server_id'=>$server_id,'product'=>$productName]));    }
 
     public function get_seo_body($host,$productName,$server_id){
-        $productName=urlencode($productName);
-        $url=$this->domen.'/parsers/server/getSeoBody.php?host='.$host.'&server_id='.$server_id.'&product='.$productName;
-        return json_decode(file_get_contents($url));
+        $url=$this->domen.'/parsers/server/getSeoBody.php';
+        return json_decode($this->post($url,['host'=>$host,'server_id'=>$server_id,'product'=>$productName]));
+    }
+
+    public function post($url,$postdata){
+        $postdata = http_build_query($postdata);
+
+        $opts = array('http' =>
+                          array(
+                              'method'  => 'POST',
+//                              'header'  => 'Content-Type: application/x-www-form-urlencoded',
+                              'content' => $postdata
+                          )
+        );
+
+        $context  = stream_context_create($opts);
+
+        return file_get_contents($url, false, $context);
     }
 }
