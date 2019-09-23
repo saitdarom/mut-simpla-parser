@@ -141,7 +141,7 @@ class Server
         $body = $productServer->body;
         if ($body) $body .= '<p>' . $this->serverApi->get_seo_body($this->host, $productServer->name, $productServer->id) . '</p>';
         $this->simpla->products->update_product((int)$product->id, [
-            'name'      => $productServer->name,
+//            'name'      => $productServer->name,
             'body'      => $body,
             'server_id' => $productServer->id,
         ]);
@@ -205,7 +205,7 @@ class Server
     {
         if (is_null($this->setting['server_edit_update'])) $this->setting['server_edit_update'] = 0;
         if (is_null($this->setting['server_status_edit'])) $this->setting['server_status_edit'] = 0;
-        if (is_null($this->setting['server_delete'])) $this->setting['server_delete'] = 1;
+        if (is_null($this->setting['server_delete'])) $this->setting['server_delete'] = 0;
         if (is_null($this->setting['server_add'])) $this->setting['server_add'] = 1;
         if (is_null($this->setting['server_replace'])) $this->setting['server_replace'] = 0;
     }
