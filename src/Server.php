@@ -51,7 +51,7 @@ class Server
     {
         var_dump('send');
         if (!$this->notes) return 0;
-        mail($this->simpla->settings->parser_email, "Обновление товаров", implode("\n<br>", $this->notes),"MIME-Version: 1.0\r\n"."Content-type: text/html; charset=utf-8\r\n");
+        mail($this->simpla->settings->parser_email, "Обновление товаров", implode("\n<br>", $this->notes), "MIME-Version: 1.0\r\n" . "Content-type: text/html; charset=utf-8\r\n");
     }
 
     public function addNewCatalogsAndProducts()
@@ -141,10 +141,13 @@ class Server
         $body = $productServer->body;
         if ($body) $body .= '<p>' . $this->serverApi->get_seo_body($this->host, $productServer->name, $productServer->id) . '</p>';
         $this->simpla->products->update_product((int)$product->id, [
-//            'name'      => $productServer->name,
             'body'      => $body,
             'server_id' => $productServer->id,
         ]);
+        if (!$product->name)
+            $this->simpla->products->update_product((int)$product->id, [
+                'name' => $productServer->name,
+            ]);
 
         if (!$product->meta_title && ($metaTitle = $this->serverApi->get_seo_title($this->host, $productServer->name, $productServer->id)))
             $this->simpla->products->update_product((int)$product->id, [
@@ -212,7 +215,10 @@ class Server
 
     public function getSettingByCategory($category)
     {
-        if(!$category->path){var_dump($category);die('no path');}
+        if (!$category->path) {
+            var_dump($category);
+            die('no path');
+        }
         foreach (array_reverse($category->path) as $categoryPath) {
             $setting = [
                 'server_edit_update' => $categoryPath->server_edit_update,
