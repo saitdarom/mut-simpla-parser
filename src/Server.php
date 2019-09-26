@@ -170,7 +170,7 @@ class Server
         foreach ($this->serverClient->get_categories() as $category) {
             if (!$this->serverApi->get_tree($category->server_id)) {
                 $this->simpla->categories->delete_category([(int)$category->id]);
-                $this->notes['deleteCat' . $category->id] = 'Удален продукт ' . $category->name;
+                $this->notes['deleteCat' . $category->id] = 'Удалена категория ' . $category->name;
                 var_dump('deleteCat ' . $category->id);
             }
         }
