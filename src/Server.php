@@ -51,7 +51,7 @@ class Server
     {
         var_dump('send');
         if (!$this->notes) return 0;
-        mail($this->simpla->settings->parser_email, "Обновление товаров", implode("\n<br>", $this->notes), "MIME-Version: 1.0\r\n" . "Content-type: text/html; charset=utf-8\r\n");
+        mail($this->simpla->settings->parser_email, "Обновление товаров ".$this->host, implode("\n<br>", $this->notes), "MIME-Version: 1.0\r\n" . "Content-type: text/html; charset=utf-8\r\n");
     }
 
     public function addNewCatalogsAndProducts()
