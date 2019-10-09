@@ -40,7 +40,7 @@ class Server
 //            $this->simpla->products->delete_product((int)$product->id);
 //        }
 //        die();
-        $this->deleteOldCategories();
+//        $this->deleteOldCategories();
         $this->addNewCatalogsAndProducts();
         $this->updateProducts();//здесь же и удаляем
 //        $this->deleteOldProducts();
