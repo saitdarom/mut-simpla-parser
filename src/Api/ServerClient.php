@@ -1,7 +1,8 @@
 <?php
+
 namespace Saitdarom\Mutmarket\Parser\Api;
 
-require_once (__DIR__.'/../../../../../api/Simpla.php');
+require_once(__DIR__ . '/../../../../../api/Simpla.php');
 
 class ServerClient extends \Simpla
 {
@@ -21,9 +22,9 @@ class ServerClient extends \Simpla
     {
         $this->db->query("SELECT p.* FROM __products p
 	                    WHERE server_id>0");
-        $returnArr=[];
+        $returnArr = [];
         foreach ($this->db->results() as $product) {
-            $returnArr[]=$this->products->get_product((int)$product->id);
+            $returnArr[] = $this->products->get_product((int)$product->id);
         }
         return $returnArr;
     }
@@ -31,7 +32,7 @@ class ServerClient extends \Simpla
     public function get_product($server_id)
     {
         $this->db->query("SELECT p.* FROM __products p
-	                    WHERE server_id=".(int)$server_id);
+	                    WHERE server_id=" . (int)$server_id);
         if ($product = $this->db->result()) {
             return $this->products->get_product((int)$product->id);
         }
@@ -42,14 +43,14 @@ class ServerClient extends \Simpla
     public function add_category($name, $parent_id, $catServer_id)
     {
         $this->db->query("SELECT c.* FROM __categories c
-	                    WHERE parent_id=".(int)$parent_id." AND (name=\"$name\" OR  server_id=".(int)$catServer_id.")");
+	                    WHERE parent_id=" . (int)$parent_id . " AND (name=\"$name\" OR  server_id=" . (int)$catServer_id . ")");
         if (!$category = $this->db->result()) {
             $category_id = $this->categories->add_category([
                 'parent_id' => $parent_id,
                 'name'      => $name,
                 'url'       => str_slug($name),
             ]);
-        }else$category_id=$category->id;
+        } else$category_id = $category->id;
         return $category_id;
     }
 
@@ -82,6 +83,7 @@ class ServerClient extends \Simpla
                     'body'               => $productServer->body,
                     'server_id'          => $productServer->id,
                     'server_status_edit' => 0,
+                    'visible'            => 0,
                 ]
             );
             $this->add_product_images($product_id, $productServer);
@@ -104,7 +106,8 @@ class ServerClient extends \Simpla
             }
     }
 
-    public function add_product_category($product_id,$category_id){
+    public function add_product_category($product_id, $category_id)
+    {
 //        $this->db->query("SELECT * FROM __products_categories
 //	                    WHERE product_id=$product_id");
 //        if (count($this->db->results()) > 1) {
@@ -113,7 +116,7 @@ class ServerClient extends \Simpla
 //            $this->db->result();
 //        }
         $this->db->query("SELECT id FROM __products_categories
-	                    WHERE product_id=".(int)$product_id." AND category_id=".(int)$category_id);
+	                    WHERE product_id=" . (int)$product_id . " AND category_id=" . (int)$category_id);
         if (!$this->db->result()) {
             $this->categories->add_product_category((int)$product_id, (int)$category_id);
         }
