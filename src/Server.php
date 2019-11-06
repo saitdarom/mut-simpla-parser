@@ -29,6 +29,32 @@ class Server
         $this->host = $host;
     }
 
+    public function setSeo()
+    {
+        foreach ($this->simpla->products->get_products(['limit' => 100000]) as $product) {
+
+            if ($product->meta_title == $product->name) $product->meta_title = '';
+            if ($product->meta_description == $product->name) $product->meta_description = '';
+            if ($product->meta_title && $product->meta_description) continue;
+
+
+            $catTemp = reset($this->simpla->categories->get_categories(['product_id' => $product->id]));
+            if (!$catTemp) continue;
+            $catTemp = $catTemp->path;
+            $category = array_shift($catTemp);
+            if (!$category->name) continue;
+
+            var_dump($product->name);
+
+            $title = json_decode($this->serverApi->post('https://00.mutmarket.ru/parsers/server/getSeoTitle.php', ['host' => $this->host, 'category' => $category->name, 'product' => $product->name]));
+            $description = json_decode($this->serverApi->post('https://00.mutmarket.ru/parsers/server/getSeoDesc.php', ['host' => $this->host, 'category' => $category->name, 'product' => $product->name]));
+
+            if (!$product->meta_title && $title) $this->simpla->products->update_product($product->id, ['meta_title' => $title]);
+            if (!$product->meta_description && $description) $this->simpla->products->update_product($product->id, ['meta_description' => $description]);
+
+        }
+    }
+
 
     public function start()
     {
@@ -51,7 +77,7 @@ class Server
     {
         var_dump('send');
         if (!$this->notes) return 0;
-        mail($this->simpla->settings->parser_email, "Обновление товаров ".$this->host, implode("\n<br>", $this->notes), "MIME-Version: 1.0\r\n" . "Content-type: text/html; charset=utf-8\r\n");
+        mail($this->simpla->settings->parser_email, "Обновление товаров " . $this->host, implode("\n<br>", $this->notes), "MIME-Version: 1.0\r\n" . "Content-type: text/html; charset=utf-8\r\n");
     }
 
     public function addNewCatalogsAndProducts()
