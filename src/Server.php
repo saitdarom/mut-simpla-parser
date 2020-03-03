@@ -10,11 +10,11 @@ use \Saitdarom\Mutmarket\Parser\Api\ServerClient;
 
 class Server
 {
-    private $simpla;
-    private $serverApi;
-    private $serverClient;
-    private $host;
-    private $notes;
+    public $simpla;
+    public $serverApi;
+    public $serverClient;
+    public $host;
+    public $notes;
 
 
     public function __construct($setting = [])
