@@ -60,10 +60,10 @@ class ServerApi
         return json_decode($this->post($url, ['host' => $host, 'server_id' => $server_id, 'product' => $productName]));
     }
 
-    public function get_seo_body($host, $productName, $server_id)
+    public function get_seo_body($host, $productName, $server_id, $arr = [])
     {
         $url = $this->domen . '/parsers/server/getSeoBody.php';
-        return json_decode($this->post($url, ['host' => $host, 'server_id' => $server_id, 'product' => $productName]));
+        return json_decode($this->post($url, array_merge(['host' => $host, 'server_id' => $server_id, 'product' => $productName], $arr)));
     }
 
     public function post($url, $postdata)
@@ -72,12 +72,12 @@ class ServerApi
 
         $opts = [
             'http' => [
-                'method'  => 'POST',
+                'method' => 'POST',
 //                              'header'  => 'Content-Type: application/x-www-form-urlencoded',
                 'content' => $postdata
             ],
-            'ssl'  => [
-                "verify_peer"      => false,
+            'ssl' => [
+                "verify_peer" => false,
                 "verify_peer_name" => false,
             ]
         ];
