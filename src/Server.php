@@ -115,7 +115,7 @@ class Server
         while (1) {
             $productsServer = $this->serverApi->get_products($server_id, $page);
             foreach ($productsServer as $productServer) {
-                if (!$this->serverClient->get_product($productServer->id)) $this->notes['add' . $productServer->id] = '';
+                if (!$this->serverClient->get_product_id($productServer->id)) $this->notes['add' . $productServer->id] = '';
                 $product_id = $this->serverClient->add_product($productServer, $this->setting['server_replace']);
                 $this->serverClient->add_product_category($product_id, $category_id);
                 if (isset($this->notes['add' . $productServer->id])) {

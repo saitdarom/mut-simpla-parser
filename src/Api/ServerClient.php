@@ -20,7 +20,7 @@ class ServerClient extends \Simpla
 
     public function get_products_all()
     {
-        $this->db->query("SELECT p.* FROM __products p
+        $this->db->query("SELECT p.id FROM __products p
 	                    WHERE server_id>0");
         $returnArr = [];
         foreach ($this->db->results() as $product) {
@@ -31,10 +31,18 @@ class ServerClient extends \Simpla
 
     public function get_product($server_id)
     {
-        $this->db->query("SELECT p.* FROM __products p
+        if ($product_id = $this->get_product_id($server_id)) {
+            return $this->products->get_product($product_id);
+        }
+        return 0;
+    }
+
+    public function get_product_id($server_id)
+    {
+        $this->db->query("SELECT p.id FROM __products p
 	                    WHERE server_id=" . (int)$server_id);
         if ($product = $this->db->result()) {
-            return $this->products->get_product((int)$product->id);
+            return (int)$product->id;
         }
         return 0;
     }
@@ -57,9 +65,7 @@ class ServerClient extends \Simpla
 
     public function add_product($productServer, $flagReplace = NULL)
     {
-        $product_id = 0;
-        if ($product = $this->get_product($productServer->id))
-            $product_id = $product->id;
+        $product_id = $this->get_product_id($productServer->id);
 
         if (!$product_id && $flagReplace) {
             $this->db->query("SELECT p.* FROM __products p
