@@ -48,16 +48,16 @@ class ServerApi
         return $temp->return;
     }
 
-    public function get_seo_title($host, $productName, $server_id)
+    public function get_seo_title($host, $productName, $server_id,$category='')
     {
         $url = $this->domen . '/parsers/server/getSeoTitle.php';
-        return json_decode($this->post($url, ['host' => $host, 'server_id' => $server_id, 'product' => $productName]));
+        return json_decode($this->post($url, ['host' => $host, 'server_id' => $server_id, 'product' => $productName,'category'=>$category]));
     }
 
-    public function get_seo_desc($host, $productName, $server_id)
+    public function get_seo_desc($host, $productName, $server_id,$category='')
     {
         $url = $this->domen . '/parsers/server/getSeoDesc.php';
-        return json_decode($this->post($url, ['host' => $host, 'server_id' => $server_id, 'product' => $productName]));
+        return json_decode($this->post($url, ['host' => $host, 'server_id' => $server_id, 'product' => $productName,'category'=>$category]));
     }
 
     public function get_seo_body($host, $productName, $server_id, $arr = [])
