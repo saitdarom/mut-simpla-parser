@@ -165,7 +165,7 @@ class Server
     public function updateProduct($product, $productServer)
     {
         $body = $productServer->body;
-        if ($body) $body .= '<p>' . $this->serverApi->get_seo_body($this->host, $productServer->name, $productServer->id) . '</p>';
+        if ($body) $body .= '<p id="SD-product-content-before">' . $this->serverApi->get_seo_body($this->host, $productServer->name, $productServer->id) . '</p>';
         $this->simpla->products->update_product((int)$product->id, [
             'body'      => $body,
             'server_id' => $productServer->id,
